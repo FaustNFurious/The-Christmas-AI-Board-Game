@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panic at the Toy Workshop - Il Gioco da Tavolo Natalizio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Configurazione Tailwind e Stili Personalizzati -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen relative">
+
+    <!-- Canvas Effetto Neve -->
+    <canvas id="snow-canvas"></canvas>
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-slate-900/80 border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-20 flex flex-wrap items-center justify-between">
+            <!-- Logo Brand / Gioco -->
+            <a href="#" class="flex items-center" aria-label="Panic at the Toy Workshop - Home">
+                <img src="./Media/Logo.jpeg" alt="Panic at the Toy Workshop" class="w-28 h-16 object-contain">
+            </a>
+
+            <!-- Menu di navigazione -->
+            <nav id="mobile-menu" class="hidden md:flex flex-col md:flex-row md:items-center md:space-x-8 px-4 py-3 md:px-0 md:py-0 font-medium text-slate-300 absolute top-full left-0 right-0 bg-slate-900/95 backdrop-blur-md border-b border-white/10 shadow-xl md:static md:bg-transparent md:backdrop-blur-none md:border-0 md:shadow-none" aria-label="Menu di navigazione">
+                <a href="#about" class="py-3 md:py-0 border-b border-white/10 md:border-0 hover:text-yellow-400 transition-colors">Il Gioco</a>
+                <a href="#how-to-play" class="py-3 md:py-0 border-b border-white/10 md:border-0 hover:text-yellow-400 transition-colors">Come si Gioca</a>
+                <a href="#timer-demo" class="py-3 md:py-0 border-b border-white/10 md:border-0 hover:text-yellow-400 transition-colors">Prova il Timer</a>
+                <a href="#rules" class="py-3 md:py-0 hover:text-yellow-400 transition-colors">Regolamento</a>
+            </nav>
+
+            <!-- CTA Preordine Header -->
+            <div class="flex items-center gap-2 sm:gap-4">
+                <button onclick="openPreorderModal()" class="px-3 sm:px-5 py-2.5 rounded-full bg-gradient-to-r from-red-600 to-amber-500 hover:from-red-500 hover:to-amber-400 text-white font-bold text-xs sm:text-sm shadow-lg shadow-red-600/30 transition-all transform hover:scale-105 active:scale-95">
+                    <i class="fa-solid fa-cart-shopping sm:mr-2"></i><span class="hidden sm:inline">Preordina Ora</span>
+                </button>
+                <button id="mobile-menu-toggle" type="button" class="md:hidden w-10 h-10 rounded-xl border border-white/20 text-white hover:text-yellow-400 hover:border-yellow-400 transition-colors flex items-center justify-center" aria-label="Apri il menu di navigazione" aria-expanded="false" aria-controls="mobile-menu">
+                    <i id="mobile-menu-icon" class="fa-solid fa-tree text-lg" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Testo Intro -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card-gold text-yellow-300 font-semibold text-sm">
+                        <i class="fa-solid fa-star"></i> Il Party Game Cooperativo di Natale 2026
+                    </div>
+                    
+                    <h1 class="font-heading text-4xl sm:text-6xl font-extrabold text-white leading-none tracking-tight">
+                        Mancano 3 minuti all'alba della Vigilia... <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-amber-300 to-red-400">Riuscirete a salvare il Natale?</span>
+                    </h1>
+                    
+                    <p class="text-lg text-slate-300 max-w-2xl mx-auto lg:mx-0 font-light leading-relaxed">
+                        Un blackout magico ha sconvolto la fabbrica di Babbo Natale! Collabora con la tua famiglia, assembla giocattoli strampalati e scambia carte a ritmo di musica prima che lo scadere del timer fermi la slitta!
+                    </p>
+
+                    <!-- CTA Buttons Hero -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                        <button onclick="openPreorderModal()" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-slate-950 font-extrabold text-lg shadow-xl shadow-amber-500/20 transform hover:-translate-y-1 transition-all flex items-center justify-center gap-3">
+                            <i class="fa-solid fa-box-open text-xl"></i> Preordina con lo Sconto 30%
+                        </button>
+                        <a href="#timer-demo" class="w-full sm:w-auto px-8 py-4 rounded-2xl glass-card hover:bg-white/10 text-white font-bold text-lg border border-white/20 transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-play text-yellow-400"></i> Prova il Timer Musicale
+                        </a>
+                    </div>
+
+                    <!-- Scheda Tecnica Rapida (Feature Badges) -->
+                    <div class="pt-8 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                        <div class="p-3 rounded-xl glass-card">
+                            <i class="fa-solid fa-users text-2xl text-yellow-400 mb-1"></i>
+                            <div class="text-sm font-bold text-white">3 - 6 Giocatori</div>
+                            <div class="text-xs text-slate-400">Tutta la famiglia</div>
+                        </div>
+                        <div class="p-3 rounded-xl glass-card">
+                            <i class="fa-solid fa-child text-2xl text-yellow-400 mb-1"></i>
+                            <div class="text-sm font-bold text-white">Età 6+</div>
+                            <div class="text-xs text-slate-400">Regole immediate</div>
+                        </div>
+                        <div class="p-3 rounded-xl glass-card">
+                            <i class="fa-solid fa-stopwatch text-2xl text-yellow-400 mb-1"></i>
+                            <div class="text-sm font-bold text-white">15-20 Minuti</div>
+                            <div class="text-xs text-slate-400">Partite veloci</div>
+                        </div>
+                        <div class="p-3 rounded-xl glass-card">
+                            <i class="fa-solid fa-hands-holding-circle text-2xl text-yellow-400 mb-1"></i>
+                            <div class="text-sm font-bold text-white">Cooperativo</div>
+                            <div class="text-xs text-slate-400">Tutti contro il tempo</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Immagine Mockup Prodotto -->
+                <div class="lg:col-span-5 relative flex justify-center">
+                    <div class="relative w-full max-w-md">
+                        <div class="absolute -inset-1 rounded-3xl bg-gradient-to-r from-red-600 to-amber-500 blur-xl opacity-50 glow-gold"></div>
+                        <div class="relative rounded-3xl overflow-hidden border border-white/20 shadow-2xl glass-card p-4">
+                            <!-- Placeholder Scatola Gioco / Mockup -->
+                            <div class="aspect-[4/3] rounded-2xl bg-gradient-to-br from-red-950 via-slate-900 to-green-950 flex flex-col items-center justify-center text-center p-1 border border-white/10 relative group">
+                                <div class="absolute top-4 right-1 bg-yellow-400 text-slate-950 font-bold text-xs px-3 py-1 rounded-full uppercase">
+                                    Edizione Natale 2026
+                                </div>
+                 
+                                <img src="./Media/Scatola del Gioco.jpeg" alt="Mockup Scatola Gioco" class="rounded-xl shadow-lg">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 1: LA STORIA E L'AMBIENTAZIONE -->
+    <section id="about" class="py-16 bg-slate-900/60 backdrop-blur-sm border-y border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="font-heading text-3xl sm:text-5xl font-bold text-white mb-4">
+                    Panico al Polo Nord!
+                </h2>
+                <p class="text-slate-300 text-lg">
+                    Cosa succede quando la fabbrica di giocattoli va in cortocircuito a 3 minuti dalla partenza della slitta?
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass-card p-8 rounded-3xl border border-white/10 hover:border-yellow-400/50 transition-all">
+                    <div class="w-14 h-14 rounded-2xl bg-red-600/20 border border-red-500/30 flex items-center justify-center text-red-400 text-2xl mb-6">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <h3 class="font-heading text-xl font-bold text-white mb-3">1. Il Blackout Magico</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Una scintilla d'incantesimo scompiglia le linee di montaggio! Gli ingranaggi ruotano al contrario, la pittura per peluche vola ovunque e i regali si scompongono.
+                    </p>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl border border-white/10 hover:border-yellow-400/50 transition-all">
+                    <div class="w-14 h-14 rounded-2xl bg-amber-600/20 border border-amber-500/30 flex items-center justify-center text-amber-400 text-2xl mb-6">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                    <h3 class="font-heading text-xl font-bold text-white mb-3">2. 3 Minuti alla Fine</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Non c'è tempo per i turni individuali: tutti i giocatori agiscono contemporaneamente! Scambiate componenti, passate carte e sistemate la catena di montaggio.
+                    </p>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl border border-white/10 hover:border-yellow-400/50 transition-all">
+                    <div class="w-14 h-14 rounded-2xl bg-green-600/20 border border-green-500/30 flex items-center justify-center text-green-400 text-2xl mb-6">
+                        <i class="fa-solid fa-sleigh"></i>
+                    </div>
+                    <h3 class="font-heading text-xl font-bold text-white mb-3">3. Salva la Slitta</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Completate le carte letterina prima dello scadere del jingle musicale! Più giocattoli perfetti imballate, più alto sarà il punteggio della vostra squadra.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: COME SI GIOCA (3 PASSI VISIVI) -->
+    <section id="how-to-play" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-yellow-400 font-bold uppercase tracking-wider text-sm">Semplice, Frenetico, Esilarante</span>
+                <h2 class="font-heading text-3xl sm:text-5xl font-bold text-white mt-2">Come si Gioca in 3 Semplici Passaggi</h2>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Passo 1 -->
+                <div class="glass-card p-8 rounded-3xl relative overflow-hidden group">
+                    <div class="absolute -top-6 -right-6 w-24 h-24 bg-red-600/20 rounded-full blur-xl group-hover:bg-red-600/40 transition-all"></div>
+                    <span class="font-heading text-6xl font-extrabold text-white/10 absolute top-4 right-6">01</span>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 rounded-xl bg-yellow-500 text-slate-950 font-extrabold flex items-center justify-center text-xl mb-6">
+                            1
+                        </div>
+                        <h3 class="font-heading text-2xl font-bold text-white mb-3">Avvia il Timer Musicale</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                            Far partire il brano natalizio (o la nostra app/timer integrata). La musica scandisce il ritmo: da lento e rilassato a ultra-frenetico nell'ultimo minuto!
+                        </p>
+                        <div class="p-3 rounded-xl bg-slate-950/40 border border-white/5 text-xs text-yellow-300 flex items-center gap-2">
+                            <i class="fa-solid fa-music"></i> Audio con tempo dinamico e sveglia finale!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Passo 2 -->
+                <div class="glass-card p-8 rounded-3xl relative overflow-hidden group">
+                    <div class="absolute -top-6 -right-6 w-24 h-24 bg-amber-600/20 rounded-full blur-xl group-hover:bg-amber-600/40 transition-all"></div>
+                    <span class="font-heading text-6xl font-extrabold text-white/10 absolute top-4 right-6">02</span>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 rounded-xl bg-yellow-500 text-slate-950 font-extrabold flex items-center justify-center text-xl mb-6">
+                            2
+                        </div>
+                        <h3 class="font-heading text-2xl font-bold text-white mb-3">Scambia & Assembla</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                            Senza rispettare turni, urlate e scambiatevi le carte componente (bottoni, ingranaggi, molle) per completare le richieste delle Carte Letterina dei bambini.
+                        </p>
+                        <div class="p-3 rounded-xl bg-slate-950/40 border border-white/5 text-xs text-yellow-300 flex items-center gap-2">
+                            <i class="fa-solid fa-handshake-angle"></i> Nessuna attesa: tutti giocano insieme!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Passo 3 -->
+                <div class="glass-card p-8 rounded-3xl relative overflow-hidden group">
+                    <div class="absolute -top-6 -right-6 w-24 h-24 bg-green-600/20 rounded-full blur-xl group-hover:bg-green-600/40 transition-all"></div>
+                    <span class="font-heading text-6xl font-extrabold text-white/10 absolute top-4 right-6">03</span>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 rounded-xl bg-yellow-500 text-slate-950 font-extrabold flex items-center justify-center text-xl mb-6">
+                            3
+                        </div>
+                        <h3 class="font-heading text-2xl font-bold text-white mb-3">Risolvi gli Imprevisti!</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                            Attenzione alle carte "Renna in corsia 3" o "Cioccolata calda versata"! Richiederanno micro-sfide fisiche o gesti di squadra per essere risolte all'istante.
+                        </p>
+                        <div class="p-3 rounded-xl bg-slate-950/40 border border-white/5 text-xs text-yellow-300 flex items-center gap-2">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Risate assicurate per grandi e piccoli.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: SIMULATORE TIMER INTERATTIVO -->
+    <section id="timer-demo" class="py-16 bg-slate-950/80 border-y border-white/10">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-600/30 text-red-300 font-semibold text-xs mb-4">
+                <i class="fa-solid fa-gamepad"></i> Widget Demo Interattivo
+            </div>
+            <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white mb-3">Prova il Timer del Gioco!</h2>
+            <p class="text-slate-400 text-sm max-w-xl mx-auto mb-8">
+                Avvia il conto alla rovescia di 3 minuti. Immagina la tensione al tavolo da gioco mentre il tempo corre!
+            </p>
+
+            <!-- Box Timer Glassmorphism -->
+            <div class="glass-card p-8 sm:p-12 rounded-3xl max-w-xl mx-auto relative border border-yellow-500/30 shadow-2xl">
+                <!-- Display Tempo -->
+                <div class="text-6xl sm:text-8xl font-heading font-extrabold text-yellow-400 tracking-wider mb-8 drop-shadow-md" id="timer-display">
+                    03:00
+                </div>
+
+                <!-- Stato/Messaggio Timer -->
+                <div id="timer-status" class="text-sm font-semibold text-slate-300 mb-6">
+                    Pronto a iniziare? Clicca su Start!
+                </div>
+
+                <!-- Pulsanti di Controllo -->
+                <div class="flex items-center justify-center gap-4">
+                    <button id="btn-timer-start" onclick="toggleTimer()" class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-green-600 to-emerald-500 hover:from-green-500 hover:to-emerald-400 text-white font-bold text-base shadow-lg shadow-green-600/30 transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-play"></i> <span id="btn-timer-text">Start Timer</span>
+                    </button>
+                    <button onclick="resetTimer()" class="px-6 py-3.5 rounded-2xl glass-card hover:bg-white/10 text-slate-300 font-semibold text-base border border-white/20 transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-rotate-left"></i> Reset
+                    </button>
+                </div>
+                <p id="music-status" class="text-xs text-slate-400 mt-5" aria-live="polite">
+                    La musica si avvia insieme al timer.
+                </p>
+                <audio id="timer-music" loop preload="none">
+                    <source src="./Media/Jingle Natalizio.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: REGOLAMENTO COMPLETO (TOGGLE DROP-DOWN) -->
+    <section id="rules" class="py-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white mb-3">Scheda Tecnica & Regolamento</h2>
+                <p class="text-slate-400 text-sm">Consulta i dettagli ufficiali sul funzionamento del gioco da tavolo.</p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Regola 1 -->
+                <div class="glass-card rounded-2xl p-6 border border-white/10">
+                    <button onclick="toggleAccordion('rule-1')" class="w-full flex items-center justify-between text-left font-heading text-lg font-bold text-white">
+                        <span><i class="fa-solid fa-bullseye text-yellow-400 mr-3"></i> Obiettivo del Gioco</span>
+                        <i class="fa-solid fa-chevron-down text-slate-400 transition-transform" id="icon-rule-1"></i>
+                    </button>
+                    <div id="rule-1" class="hidden mt-4 pt-4 border-t border-white/10 text-slate-300 text-sm space-y-2 leading-relaxed">
+                        <p>L'obiettivo della squadra è completare e inscatolare con successo almeno <strong>10 giocattoli natalizi</strong> prima che il timer di 3 minuti giunga a zero.</p>
+                        <p>Se la squadra completa meno di 5 giocattoli, il Natale è a rischio! Se ne completa 12 o più, la squadra ottiene il titolo di <em>"Elfi Leggendari del Polo Nord"</em>.</p>
+                    </div>
+                </div>
+
+                <!-- Regola 2 -->
+                <div class="glass-card rounded-2xl p-6 border border-white/10">
+                    <button onclick="toggleAccordion('rule-2')" class="w-full flex items-center justify-between text-left font-heading text-lg font-bold text-white">
+                        <span><i class="fa-solid fa-box-open text-yellow-400 mr-3"></i> Contenuto della Scatola</span>
+                        <i class="fa-solid fa-chevron-down text-slate-400 transition-transform" id="icon-rule-2"></i>
+                    </button>
+                    <div id="rule-2" class="hidden mt-4 pt-4 border-t border-white/10 text-slate-300 text-sm leading-relaxed">
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>1 Tabellone Catena di Montaggio del Polo Nord</li>
+                            <li>60 Carte Componente (Ingranaggi, Stoffa, Batterie Magiche, Vernice)</li>
+                            <li>25 Carte Letterina Dei Bambini (Obiettivi Giocattolo)</li>
+                            <li>15 Carte Imprevisto Caotico</li>
+                            <li>6 Pedine Elfo in legno decorato</li>
+                            <li>Accesso Gratuito al Timer Musicale Ufficiale tramite QR Code</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Regola 3 -->
+                <div class="glass-card rounded-2xl p-6 border border-white/10">
+                    <button onclick="toggleAccordion('rule-3')" class="w-full flex items-center justify-between text-left font-heading text-lg font-bold text-white">
+                        <span><i class="fa-solid fa-bolt text-yellow-400 mr-3"></i> Gestione degli Imprevisti</span>
+                        <i class="fa-solid fa-chevron-down text-slate-400 transition-transform" id="icon-rule-3"></i>
+                    </button>
+                    <div id="rule-3" class="hidden mt-4 pt-4 border-t border-white/10 text-slate-300 text-sm leading-relaxed">
+                        <p>Durante il gioco frenetico, quando un giocatore pesca una carta <strong>Imprevisto</strong>, deve gridare l'azione indicata sulla carta (es. *"Batti le mani 3 volte"* o *"Fai fare un giro di campo all'elfo"*). La catena di montaggio del giocatore rimane bloccata finché l'azione non viene eseguita correttamente!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 border-t border-white/10 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <!-- Info Brand -->
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-white text-sm font-bold">
+                        <i class="fa-solid fa-gift"></i>
+                    </div>
+                    <span class="font-heading font-bold text-lg text-white">Panic at the Toy Workshop</span>
+                </div>
+
+                <!-- Crediti Aulab -->
+                <div class="text-center md:text-right text-xs text-slate-400">
+                    Progetto realizzato per l'<strong>Aulab AI Challenge Novembre 2026</strong><br>
+                    Sviluppato interamente tramite Intelligenze Artificiali Generative.
+                </div>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-white/5 text-center text-xs text-slate-500">
+                &copy; 2026 Aulab LevelUp Challenge. Tutti i diritti riservati.
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODALE DI PREORDINE -->
+    <div id="preorder-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md hidden p-4">
+        <div class="glass-card border border-yellow-500/40 rounded-3xl p-6 sm:p-8 max-w-md w-full relative shadow-2xl">
+            <!-- Chiudi Modale -->
+            <button onclick="closePreorderModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 rounded-full bg-yellow-500/20 text-yellow-400 mx-auto flex items-center justify-center text-2xl mb-3">
+                    <i class="fa-solid fa-truck-fast"></i>
+                </div>
+                <h3 class="font-heading text-2xl font-bold text-white">Preordina la Tua Copia</h3>
+                <p class="text-xs text-slate-300 mt-1">Ricevi il gioco in tempo per Natale con il 30% di sconto riservato!</p>
+            </div>
+
+            <!-- Prezzo Promo -->
+            <div class="flex items-center justify-center gap-3 mb-6 p-3 rounded-2xl bg-white/5 border border-white/10">
+                <span class="text-slate-400 line-through text-sm">€ 34.99</span>
+                <span class="text-2xl font-bold text-yellow-400">€ 24.49</span>
+                <span class="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">-30% Early Bird</span>
+            </div>
+
+            <!-- Form simulato -->
+            <form onsubmit="handlePreorderSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Nome Completo</label>
+                    <input type="text" required placeholder="Mario Rossi" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-yellow-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Email per la Conferma</label>
+                    <input type="email" required placeholder="mario.rossi@example.com" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-yellow-400">
+                </div>
+                <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-slate-950 font-bold text-sm shadow-lg shadow-amber-500/20 transition-all">
+                    Conferma Preordine
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCRIPT JAVASCRIPT -->
+    <script src="Main.js"></script>
+</body>
+</html>
